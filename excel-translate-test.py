@@ -1,4 +1,5 @@
 import json
+import os
 
 from converter import json_to_excel, json_to_yaml, yaml_to_excel, yaml_to_json, excel_to_json
 
@@ -14,22 +15,26 @@ if __name__ == "__main__":
         },
     }
 
+    # create test-data directory if it doesn't exist
+    if not os.path.exists("test-data"):
+        os.makedirs("test-data")
+
     # save sample_dict as JSON
     json_data = json.dumps(sample_dict, indent=4)
-    with open("sample.json", "w", encoding="utf-8") as file:
+    with open("test-data/sample.json", "w", encoding="utf-8") as file:
         file.write(json_data)
 
     # Convert JSON to YAML
-    json_to_yaml("sample.json", "sample.yaml")
+    json_to_yaml("test-data/sample.json", "test-data/sample.yaml")
 
     # Convert JSON to EXCEL
-    json_to_excel("sample.json", "sample.xlsx")
+    json_to_excel("test-data/sample.json", "test-data/sample.xlsx")
 
     # Convert YAML to JSON
-    yaml_to_json("sample.yaml", "sample2.json")
+    yaml_to_json("test-data/sample.yaml", "test-data/sample2.json")
 
     # Convert YAML to EXCEL
-    yaml_to_excel("sample.yaml", "sample2.xlsx")
+    yaml_to_excel("test-data/sample.yaml", "test-data/sample2.xlsx")
     
     # Convert EXCEL to JSON
-    excel_to_json("sample.xlsx", "sample3.json")
+    excel_to_json("test-data/sample.xlsx", "test-data/sample3.json")
