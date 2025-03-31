@@ -72,3 +72,17 @@ def excel_to_json(excel_file, json_file):
     json_data = data.to_json(orient="records", indent=4)
     with open(json_file, "w", encoding="utf-8") as file:
         file.write(json_data)
+
+
+def excel_to_yaml(excel_file, yaml_file):
+    """
+    Convert Excel to YAML
+    """
+    # Read Excel file
+    data = pandas.read_excel(excel_file)
+    # Convert data to a dictionary
+    data_dict = data.to_dict(orient="records")
+    # Convert dictionary to YAML string
+    yaml_data = yaml.dump(data_dict, default_flow_style=False)
+    with open(yaml_file, "w", encoding="utf-8") as file:
+        file.write(yaml_data)
