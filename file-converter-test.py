@@ -35,6 +35,6 @@ if __name__ == "__main__":
 
     # Convert YAML to EXCEL
     yaml_to_excel("test-data/sample.yaml", "test-data/sample2.xlsx")
-    
+
     # Convert EXCEL to JSON
     excel_to_json("test-data/sample.xlsx", "test-data/sample3.json")

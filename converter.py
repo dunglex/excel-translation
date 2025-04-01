@@ -122,15 +122,80 @@ def excel_to_yaml(excel_file, yaml_file):
     with open(yaml_file, "w", encoding="utf-8") as file:
         file.write(yaml_data)
 
+
 def _flatten_object(obj, separator='.'):
     output = {}
 
     def flatten(x, name='', separator=separator):
         if type(x) is dict:
             for a in x:
-                flatten(x[a], name + a + separator, separator=separator)
+                flatten(x[a], str(name) + str(a) + str(separator), separator=separator)
         else:
             output[name[:-1]] = x
     
     flatten(obj)
     return output
+
+
+def json_files_to_excel(eng_file, vi_file, excel_file, sheet_name='translation'):
+    """
+    Convert two JSON files to a single Excel file with two sheets
+    """
+    # Read JSON files
+    with open(eng_file, "r", encoding="utf-8") as file:
+        eng_data = json.load(file)
+    with open(vi_file, "r", encoding="utf-8") as file:
+        vi_data = json.load(file)
+
+    eng_dict = _flatten_object(eng_data)
+    vi_dict = _flatten_object(vi_data)
+
+    # merge the two dictionaries, using the same key, the column name of value in eng_file is "eng" and in vi_file is "vi"
+    merged_data = {}
+    for key in set(eng_dict.keys()).union(vi_dict.keys()):
+        merged_data[key] = {
+            "eng": eng_dict.get(key, ""),
+            "vi": vi_dict.get(key, "")
+        }
+
+    # Convert merged data to a DataFrame
+    df = pandas.DataFrame(merged_data).T.reset_index()
+    df.columns = ["key", "eng", "vi"]
+
+    # Sort the DataFrame by the "key" column
+    df = df.sort_values(by=["key"], ascending=True)
+
+    # Write DataFrame to Excel file
+    df.to_excel(excel_file, sheet_name=sheet_name, index=False)
+
+
+def yaml_files_to_excel(eng_file, vi_file, excel_file, sheet_name='translation'):
+    """
+    Convert two YAML files to a single Excel file with two sheets
+    """
+    # Read YAML files
+    with open(eng_file, "r", encoding="utf-8") as file:
+        eng_data = yaml.safe_load(file)
+    with open(vi_file, "r", encoding="utf-8") as file:
+        vi_data = yaml.safe_load(file)
+
+    eng_dict = _flatten_object(eng_data)
+    vi_dict = _flatten_object(vi_data)
+
+    # merge the two dictionaries, using the same key, the column name of value in eng_file is "eng" and in vi_file is "vi"
+    merged_data = {}
+    for key in set(eng_dict.keys()).union(vi_dict.keys()):
+        merged_data[key] = {
+            "eng": eng_dict.get(key, ""),
+            "vi": vi_dict.get(key, "")
+        }
+
+    # Convert merged data to a DataFrame
+    df = pandas.DataFrame(merged_data).T.reset_index()
+    df.columns = ["key", "eng", "vi"]
+
+    # Sort the DataFrame by the "key" column
+    df = df.sort_values(by=["key"], ascending=True)
+
+    # Write DataFrame to Excel file
+    df.to_excel(excel_file, sheet_name=sheet_name, index=False)
