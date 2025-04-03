@@ -226,8 +226,8 @@ def excel_to_json_files(excel_file, eng_file, vi_file, deep_level: int = 1):
             vi_data_dict[key] = vi_value
 
     # Convert dictionaries to JSON strings
-    eng_json_data = json.dumps(eng_data_dict, indent=4, ensure_ascii=False)
-    vi_json_data = json.dumps(vi_data_dict, indent=4, ensure_ascii=False)
+    eng_json_data = json.dumps(eng_data_dict, indent=2, ensure_ascii=False)
+    vi_json_data = json.dumps(vi_data_dict, indent=2, ensure_ascii=False)
 
     # Write JSON strings to files
     with open(eng_file, "w", encoding="utf-8") as file:
