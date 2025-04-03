@@ -182,7 +182,7 @@ def json_files_to_excel(eng_file, vi_file, excel_file, sheet_name='translation')
     df.to_excel(excel_file, sheet_name=sheet_name, index=False)
 
 
-def excel_to_json_files(excel_file, eng_file, vi_file):
+def excel_to_json_files(excel_file, eng_file, vi_file, deep_level: int = 1):
     """
     Convert Excel file to two JSON files
     """
@@ -204,7 +204,7 @@ def excel_to_json_files(excel_file, eng_file, vi_file):
         vi_value = str(row['vi']) if row['eng'] is not None else ""
 
         if '.' in key:
-            keys = key.split('.', maxsplit=-1)
+            keys = key.split('.', maxsplit=deep_level)  # Extract top-level only
             
             # Populate eng_data_dict
             eng_current = eng_data_dict
